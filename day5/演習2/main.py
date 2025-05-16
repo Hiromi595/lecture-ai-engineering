@@ -285,3 +285,28 @@ if __name__ == "__main__":
     # ベースラインとの比較
     baseline_ok = ModelTester.compare_with_baseline(metrics)
     print(f"ベースライン比較: {'合格' if baseline_ok else '不合格'}")
+
+
+def load_model(path="model.pkl"):
+    return joblib.load(path)
+
+def load_data():
+    # 実際は演習1で使ったテストデータをload
+    data = load_iris()
+    return data.data, data.target
+
+def evaluate_model():
+    model = load_model()
+    X_test, y_test = load_data()
+
+    start = time.time()
+    y_pred = model.predict(X_test)
+    latency = time.time() - start
+
+    acc = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {acc}, Latency: {latency:.4f}s")
+
+    assert acc > 0.8, "Model accuracy is too low!"  # baseline設定可
+
+if __name__ == "__main__":
+    evaluate_model()
